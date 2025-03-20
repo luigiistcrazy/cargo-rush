@@ -61,10 +61,10 @@ After initialization, cargo-rush sets up the necessary configuration files to de
 ### (WIP) Example Configuration:
 
 ```sh
-cargo rush remote add <name> <user@host>          # Adds a new remote host.
-cargo rush remote remove <name>                   # Removes an existing remote.
-cargo rush remote rename <old-name> <new-name>    # Renames a remote.
-cargo rush remote list                            # Shows all configured remotes.
+cargo rush remote add <name> <user@host>          # Adds a new remote host. (WIP)
+cargo rush remote remove <name>                   # Removes an existing remote. (WIP)
+cargo rush remote rename <old-name> <new-name>    # Renames a remote. (WIP)
+cargo rush remote list                            # Shows all configured remotes. (WIP)
 ```
 
 and much more...
@@ -72,10 +72,10 @@ and much more...
 ## WIP Overview
 
 **cargo-rush** is heavy WIP and not ready for usage. The first official alpha release is expected once
-[Project Setup](https://github.com/luigiistcrazy/cargo-rush/new/master?filename=README.md#project-setup),
-[Remote Management](https://github.com/luigiistcrazy/cargo-rush/new/master?filename=README.md#remote-management),
-[File Synchroniation](https://github.com/luigiistcrazy/cargo-rush/new/master?filename=README.md#file-synchronization),
-and [Remote Execution](https://github.com/luigiistcrazy/cargo-rush/new/master?filename=README.md#remote-execution) are implemented to a basic extend.
+[Project Setup](https://github.com/luigiistcrazy/cargo-rush#project-setup),
+[Remote Management](https://github.com/luigiistcrazy/cargo-rush#remote-management),
+[File Synchroniation](https://github.com/luigiistcrazy/cargo-rush#file-synchronization),
+and [Remote Execution](https://github.com/luigiistcrazy/cargo-rush#remote-execution) are implemented to a basic extend.
 
 ### Project Setup
 - [x] Initialize the project with `cargo rush init`

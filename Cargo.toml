@@ -1,11 +1,11 @@
 [package]
 name = "cargo-rush"
-description = "Build and run your Rust projects seamlessly on a remote machine! 🦀⚡"
+description = "Build and run your Rust projects effortlessly on a remote machine! 🦀⚡"
 repository = "https://github.com/luigiistcrazy/cargo-rush"
 license = "GPL-3.0-or-later"
 keywords = ["CLI-tool", "cargo", "remote", "compiling"]
 categories = ["command-line-utilities", "development-tools::cargo-plugins"]
-version = "0.0.2-indev"
+version = "0.0.3-indev"
 edition = "2024"
 authors = ["Luis Weitl <weitlluis@proton.me>"]
 
