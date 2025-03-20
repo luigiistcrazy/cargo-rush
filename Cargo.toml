@@ -1,7 +1,21 @@
 [package]
-name = "cargorush"
-version = "0.1.0"
+name = "cargo-rush"
+description = "Build and run your Rust projects seamlessly on a remote machine! 🦀⚡"
+repository = "https://github.com/luigiistcrazy/cargo-rush"
+license = "GPL-3.0-or-later"
+keywords = ["CLI-tool", "cargo", "remote", "compiling"]
+categories = ["command-line-utilities", "development-tools::cargo-plugins"]
+version = "0.0.2-indev"
 edition = "2024"
+authors = ["Luis Weitl <weitlluis@proton.me>"]
 
 [dependencies]
 clap = { version = "4.5.32", features = ["derive"] }
+colored = "3.0.0"
+
+[profile.release]
+opt-level = "s"
+debug = "none"
+strip = true
+lto = "thin"
+codegen-units = 1
