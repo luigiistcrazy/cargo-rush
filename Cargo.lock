@@ -54,7 +54,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-rush"
-version = "0.0.3-indev"
+version = "0.0.4-indev-b-populate-cargorush"
 dependencies = [
  "clap",
  "colored",

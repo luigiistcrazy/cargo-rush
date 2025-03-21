@@ -5,7 +5,7 @@ repository = "https://github.com/luigiistcrazy/cargo-rush"
 license = "GPL-3.0-or-later"
 keywords = ["CLI-tool", "cargo", "remote", "compiling"]
 categories = ["command-line-utilities", "development-tools::cargo-plugins"]
-version = "0.0.3-indev"
+version = "0.0.4-indev-b-populate-cargorush"
 edition = "2024"
 authors = ["Luis Weitl <weitlluis@proton.me>"]
 

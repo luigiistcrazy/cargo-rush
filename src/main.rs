@@ -1,24 +1,15 @@
-use clap::Parser;
+use clap::{Parser, CommandFactory};
 use colored::*;
+use std::env;
 use std::io::{self, Write};
-use std::thread;
-use std::time::Duration;
 
 #[derive(Parser, Debug)]
-#[command(name = "cargo")]
-#[command(bin_name = "cargo")]
 enum CargoCli {
     Rush(RushArgs),
 }
 
 #[derive(clap::Args, Debug)]
-#[command(
-    author,
-    version,
-    about,
-    long_about = None,
-    arg_required_else_help = true
-)]
+#[command(version)]
 struct RushArgs {
     /// Initialize cargo-rush in current directory
     #[arg(long)]
@@ -31,7 +22,7 @@ fn main() {
     let args = std::env::args().collect::<Vec<_>>();
 
     if args.get(1).map(|s| s.as_str()) != Some("rush") {
-        show_error("This command must be run as 'cargo rush'");
+        show_error("It is adviced to run cargo-rush with 'cargo rush'");
         std::process::exit(1);
     }
 
@@ -40,13 +31,17 @@ fn main() {
             let current_dir = std::env::current_dir().expect("Failed to get current directory");
 
             check_cargo_toml(&current_dir);
-            simulate_loading(150);
 
             if args.init {
                 handle_init(&current_dir);
             } else {
                 check_cargorush_file(&current_dir);
-                simulate_loading(100);
+                // After checks, print help for the 'rush' subcommand
+                let mut cmd = CargoCli::command();
+                if let Some(rush_cmd) = cmd.find_subcommand_mut("rush") {
+                    rush_cmd.print_help().expect("Failed to print help");
+                }
+                std::process::exit(0);
             }
         }
     }
@@ -77,14 +72,6 @@ fn show_info(message: &str) {
     println!("{} {}", "[i]".blue().bold(), message.blue());
 }
 
-fn simulate_loading(millis: u64) {
-    // Simulate loading for smoother UX (Can technically be removed if desired)
-    print!("{}", "⏳".cyan());
-    io::stdout().flush().unwrap();
-    thread::sleep(Duration::from_millis(millis));
-    print!("\r");
-}
-
 fn check_cargo_toml(current_dir: &std::path::Path) {
     if !current_dir.join("Cargo.toml").exists() {
         show_warning("Cargo.toml not found in current directory");
@@ -98,15 +85,43 @@ fn check_cargorush_file(current_dir: &std::path::Path) {
         show_warning("cargo-rush not initialized in this project");
         show_info("Run `cargo rush --init` to initialize");
         std::process::exit(1);
+    } else if current_dir.join(".cargorush.toml").exists() {
+        // Set path for windows machines
+        #[cfg(not(target_family = "unix"))]
+        let cargorush_path = format!(
+            ".cargorush.toml found at '{}\\.cargorush.toml'",
+            env::current_dir().unwrap().display()
+        );
+
+        // Set path for non-windows machines
+        let cargorush_path = format!(
+            ".cargorush.toml found at '{}/.cargorush.toml'",
+            env::current_dir().unwrap().display()
+        );
+        show_warning("cargo-rush already initialized");
+        show_info(&cargorush_path);
     }
 }
 
-// Updated handle_init function with visual enhancements
 fn handle_init(current_dir: &std::path::Path) {
     let rush_file = current_dir.join(".cargorush.toml");
 
     if rush_file.exists() {
+        // Set path for windows machines
+        #[cfg(not(target_family = "unix"))]
+        let cargorush_path = format!(
+            ".cargorush.toml found at '{}\\.cargorush.toml'",
+            env::current_dir().unwrap().display()
+        );
+
+        // Set path for non-windows machines
+        let cargorush_path = format!(
+            ".cargorush.toml found at '{}/.cargorush.toml'",
+            env::current_dir().unwrap().display()
+        );
+
         show_warning("cargo-rush is already active in this directory");
+        show_info(&cargorush_path);
         show_info("Skipping initialization...");
         return;
     }
@@ -136,7 +151,7 @@ fn handle_gitignore(current_dir: &std::path::Path) {
     print!(
         "{} {} ",
         "[?]".cyan().bold(),
-        "Add .cargorush.toml to .gitignore?".bold()
+        "Append .cargorush.toml to .gitignore?".bold()
     );
     print!(
         "[{}Y{}/{}n{}] ",
