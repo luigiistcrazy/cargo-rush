@@ -94,7 +94,7 @@ fn check_cargo_toml(current_dir: &std::path::Path) {
 }
 
 fn check_cargorush_file(current_dir: &std::path::Path) {
-    if !current_dir.join(".cargorush").exists() {
+    if !current_dir.join(".cargorush.toml").exists() {
         show_warning("cargo-rush not initialized in this project");
         show_info("Run `cargo rush --init` to initialize");
         std::process::exit(1);
@@ -103,7 +103,7 @@ fn check_cargorush_file(current_dir: &std::path::Path) {
 
 // Updated handle_init function with visual enhancements
 fn handle_init(current_dir: &std::path::Path) {
-    let rush_file = current_dir.join(".cargorush");
+    let rush_file = current_dir.join(".cargorush.toml");
 
     if rush_file.exists() {
         show_warning("cargo-rush is already active in this directory");
@@ -114,10 +114,10 @@ fn handle_init(current_dir: &std::path::Path) {
     match std::fs::File::create(&rush_file) {
         Ok(_) => {
             show_success("cargo-rush initialized successfully!");
-            show_info("It's recommended to add .cargorush to your .gitignore");
+            show_info("It's recommended to add .cargorush.toml to your .gitignore");
         }
         Err(e) => {
-            show_error(&format!("Failed to create .cargorush file: {}", e));
+            show_error(&format!("Failed to create .cargorush.toml file: {}", e));
             std::process::exit(1);
         }
     }
@@ -136,7 +136,7 @@ fn handle_gitignore(current_dir: &std::path::Path) {
     print!(
         "{} {} ",
         "[?]".cyan().bold(),
-        "Add .cargorush to .gitignore?".bold()
+        "Add .cargorush.toml to .gitignore?".bold()
     );
     print!(
         "[{}Y{}/{}n{}] ",
@@ -160,18 +160,18 @@ fn handle_gitignore(current_dir: &std::path::Path) {
                 .open(&gitignore_path)
             {
                 Ok(mut file) => {
-                    if let Err(e) = writeln!(file, "\n# Added by cargo-rush\n.cargorush") {
+                    if let Err(e) = writeln!(file, "\n# Added by cargo-rush\n.cargorush.toml") {
                         show_error(&format!("Failed to write to .gitignore: {}", e));
                         return;
                     }
-                    show_success("Added .cargorush to .gitignore");
+                    show_success("Added .cargorush.toml to .gitignore");
                 }
                 Err(e) => show_error(&format!("Failed to open .gitignore: {}", e)),
             }
         }
         "n" => {
             show_warning("Skipping .gitignore modification");
-            show_info("You can manually add '.cargorush' to your .gitignore later");
+            show_info("You can manually add '.cargorush.toml' to your .gitignore later");
         }
         _ => {
             show_error("Invalid input");
@@ -182,15 +182,15 @@ fn handle_gitignore(current_dir: &std::path::Path) {
 }
 
 fn populate_cargorush(current_dir: &std::path::Path) {
-    let rush_file = current_dir.join(".cargorush");
+    let rush_file = current_dir.join(".cargorush.toml");
 
     match std::fs::OpenOptions::new().append(true).open(&rush_file) {
         Ok(mut file) => {
             if let Err(e) = writeln!(file, "[rush.info]\nname = \"{}\"", env!("CARGO_PKG_NAME")) {
-                show_error(&format!("Failed to write to .cargorush: {}", e));
+                show_error(&format!("Failed to write to .cargorush.toml: {}", e));
                 return;
             }
         }
-        Err(e) => show_error(&format!("Failed to open .cargorush: {}", e)),
+        Err(e) => show_error(&format!("Failed to open .cargorush.toml: {}", e)),
     }
 }

@@ -18,3 +18,9 @@ target/
 
 # cargo-rush configuration
 .cargorush
+
+# Added by cargo-rush
+.cargorush.toml
+
+# Added by cargo-rush
+.cargorush.toml
