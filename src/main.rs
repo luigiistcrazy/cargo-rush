@@ -1,8 +1,8 @@
 use clap::Parser;
 use colored::*;
 use std::io::{self, Write};
-use std::time::Duration;
 use std::thread;
+use std::time::Duration;
 
 #[derive(Parser, Debug)]
 #[command(name = "cargo")]
@@ -27,7 +27,7 @@ struct RushArgs {
 
 fn main() {
     print_version_header();
-    
+
     let args = std::env::args().collect::<Vec<_>>();
 
     if args.get(1).map(|s| s.as_str()) != Some("rush") {
@@ -38,7 +38,7 @@ fn main() {
     match CargoCli::parse() {
         CargoCli::Rush(args) => {
             let current_dir = std::env::current_dir().expect("Failed to get current directory");
-            
+
             check_cargo_toml(&current_dir);
             simulate_loading(150);
 
@@ -62,42 +62,27 @@ fn print_version_header() {
 }
 
 fn show_error(message: &str) {
-    eprintln!(
-        "{} {}",
-        "[✖]".red().bold(),
-        message.red().bold()
-    );
+    eprintln!("{} {}", "[✖]".red().bold(), message.red().bold());
 }
 
 fn show_warning(message: &str) {
-    eprintln!(
-        "{} {}",
-        "[⚠]".yellow().bold(),
-        message.yellow().bold()
-    );
+    eprintln!("{} {}", "[⚠]".yellow().bold(), message.yellow().bold());
 }
 
 fn show_success(message: &str) {
-    println!(
-        "{} {}",
-        "[✔]".green().bold(),
-        message.green().bold()
-    );
+    println!("{} {}", "[✔]".green().bold(), message.green().bold());
 }
 
 fn show_info(message: &str) {
-    println!(
-        "{} {}",
-        "[i]".blue().bold(),
-        message.blue()
-    );
+    println!("{} {}", "[i]".blue().bold(), message.blue());
 }
 
 fn simulate_loading(millis: u64) {
+    // Simulate loading for smoother UX (Can technically be removed if desired)
     print!("{}", "⏳".cyan());
     io::stdout().flush().unwrap();
     thread::sleep(Duration::from_millis(millis));
-    print!("\r");  // Clear the spinner
+    print!("\r");
 }
 
 fn check_cargo_toml(current_dir: &std::path::Path) {
@@ -136,13 +121,13 @@ fn handle_init(current_dir: &std::path::Path) {
             std::process::exit(1);
         }
     }
-
+    populate_cargorush(current_dir);
     handle_gitignore(current_dir);
 }
 
 fn handle_gitignore(current_dir: &std::path::Path) {
     let gitignore_path = current_dir.join(".gitignore");
-    
+
     if !gitignore_path.exists() {
         show_warning("No .gitignore file found");
         return;
@@ -153,16 +138,19 @@ fn handle_gitignore(current_dir: &std::path::Path) {
         "[?]".cyan().bold(),
         "Add .cargorush to .gitignore?".bold()
     );
-    print!("[{}Y{}/{}n{}] ", 
-        "".bold().green(), 
-        "".clear(), 
-        "".bold().red(), 
+    print!(
+        "[{}Y{}/{}n{}] ",
+        "".bold().green(),
+        "".clear(),
+        "".bold().red(),
         "".clear()
     );
     io::stdout().flush().unwrap();
 
     let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read input");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read input");
     let input = input.trim().to_lowercase();
 
     match input.as_str() {
@@ -191,4 +179,18 @@ fn handle_gitignore(current_dir: &std::path::Path) {
         }
     }
     println!();
+}
+
+fn populate_cargorush(current_dir: &std::path::Path) {
+    let rush_file = current_dir.join(".cargorush");
+
+    match std::fs::OpenOptions::new().append(true).open(&rush_file) {
+        Ok(mut file) => {
+            if let Err(e) = writeln!(file, "[rush.info]\nname = \"{}\"", env!("CARGO_PKG_NAME")) {
+                show_error(&format!("Failed to write to .cargorush: {}", e));
+                return;
+            }
+        }
+        Err(e) => show_error(&format!("Failed to open .cargorush: {}", e)),
+    }
 }
