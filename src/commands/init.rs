@@ -1,19 +1,11 @@
-use std::fs;
-use std::io;
+#[cfg(debug_assertions)]
+use crate::debug;
+
+use crate::info;
 
 pub fn cli() {
-    let dir_name = "test";
-    println!("Initializing project...");
-    match fs::create_dir_all(dir_name) {
-        Ok(_) => {
-            println!("Successfully created directory: '{}'", dir_name);
-        }
-        Err(e) => {
-            if e.kind() == io::ErrorKind::AlreadyExists {
-                println!("Directory '{}' already exists.", dir_name);
-            } else {
-                eprintln!("Failed to create directory '{}': {}", dir_name, e);
-            }
-        }
-    }
+    let current_dir = std::env::current_dir().unwrap_or_default();
+    #[cfg(debug_assertions)]
+    debug!(&format!("Trying initialization at {:?}", current_dir));
+    info!("Initializing project...");
 }

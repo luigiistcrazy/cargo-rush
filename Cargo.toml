@@ -13,6 +13,7 @@ authors = ["Luis Weitl <weitlluis@proton.me>"]
 anyhow = "1.0.98"
 clap = { version = "4.5.32", features = ["derive", "cargo"] }
 colored = "3.0.0"
+crossterm = "0.29.0"
 serde = "1.0.219"
 
 [profile.release]
