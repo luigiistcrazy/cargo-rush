@@ -2,6 +2,8 @@ use clap::{Parser, crate_authors, crate_description, crate_version};
 
 use crate::commands;
 
+use crossterm::style::Stylize;
+
 #[cfg(debug_assertions)]
 use crate::debug;
 

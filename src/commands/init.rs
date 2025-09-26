@@ -1,12 +1,14 @@
 #[cfg(debug_assertions)]
 use crate::debug;
 
+use crossterm::style::Stylize;
+
 use std::{fs::File, io::ErrorKind, process};
 
-use crate::{error, info};
+use crate::{error, info, toml};
 
 pub fn cli() {
-    let current_dir = std::env::current_dir().unwrap_or_default();
+    let proj_dir = std::env::current_dir().unwrap_or_default();
     match File::open("Cargo.toml") {
         Ok(_) => (),
         Err(err) => {
@@ -20,24 +22,18 @@ pub fn cli() {
         }
     };
     #[cfg(debug_assertions)]
-    debug!(&format!(
-        "Trying initialization at {}",
-        current_dir.display()
-    ));
+    debug!(&format!("Trying initialization at {}", proj_dir.display()));
     info!("Initializing project...");
     match File::create_new("Cargorush.toml") {
         Ok(_) => {
-            info!(&format!(
-                "Initialized cargo-rush in {}",
-                current_dir.display()
-            ));
+            info!(&format!("Initialized cargo-rush in {}", proj_dir.display()));
         }
-        Err(err) => match err.kind() {
-            ErrorKind::AlreadyExists => {
+        Err(err) => {
+            if err.kind() == ErrorKind::AlreadyExists {
                 error!("cargo-rush has already been initialized in this directory!");
-                process::exit(0)
+                // process::exit(0)
             }
-            _ => (),
-        },
+        }
     };
+    toml::init(&proj_dir);
 }

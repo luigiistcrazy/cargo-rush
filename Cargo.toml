@@ -11,14 +11,16 @@ authors = ["Luis Weitl <weitlluis@proton.me>"]
 
 [dependencies]
 anyhow = "1.0.98"
+cargo_toml = "0.22.3"
 clap = { version = "4.5.32", features = ["derive", "cargo"] }
 colored = "3.0.0"
 crossterm = "0.29.0"
 serde = "1.0.219"
+toml_edit = { version = "0.23.6", features = ["serde"] }
 
-[profile.release]
-opt-level = "s"
-debug = "none"
-strip = true
-lto = "thin"
-codegen-units = 1
+# [profile.release]
+# opt-level = "s"
+# debug = "none"
+# strip = true
+# lto = "thin"
+# codegen-units = 1

@@ -1,29 +1,33 @@
 #[cfg(debug_assertions)]
 #[macro_export]
 macro_rules! debug {
-    ($msg:expr) => {
-        use crossterm::style::Stylize;
-        println!("{} \"{}\"", "[Debug]:".bold().dim(), $msg);
-    };
+    ($msg:expr) => {{
+        // The trait `crossterm::style::Stylize` must be in scope at call site.
+        let label = <&str as crossterm::style::Stylize>::dim("[Debug]:").bold();
+        println!("{} \"{}\"", label, $msg);
+    }};
 }
 
 #[macro_export]
 macro_rules! info {
-    ($msg:expr) => {
-        println!("{} \"{}\"", "[Info]:".bold().grey(), $msg);
-    };
+    ($msg:expr) => {{
+        let label = <&str as crossterm::style::Stylize>::grey("[Info]:").bold();
+        println!("{} \"{}\"", label, $msg);
+    }};
 }
 
 #[macro_export]
 macro_rules! warning {
-    ($msg:expr) => {
-        println!("{} \"{}\"", "[Warning]:".bold().yellow(), $msg);
-    };
+    ($msg:expr) => {{
+        let label = <&str as crossterm::style::Stylize>::yellow("[Warning]:").bold();
+        println!("{} \"{}\"", label, $msg);
+    }};
 }
 
 #[macro_export]
 macro_rules! error {
-    ($msg:expr) => {
-        println!("{} \"{}\"", "[Error]:".bold().red(), $msg);
-    };
+    ($msg:expr) => {{
+        let label = <&str as crossterm::style::Stylize>::red("[Error]:").bold();
+        println!("{} \"{}\"", label, $msg);
+    }};
 }
