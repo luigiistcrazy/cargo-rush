@@ -18,9 +18,9 @@ crossterm = "0.29.0"
 serde = "1.0.219"
 toml_edit = { version = "0.23.6", features = ["serde"] }
 
-# [profile.release]
-# opt-level = "s"
-# debug = "none"
-# strip = true
-# lto = "thin"
-# codegen-units = 1
+[profile.release]
+opt-level = "s"
+debug = "none"
+strip = true
+lto = "fat"
+codegen-units = 1
