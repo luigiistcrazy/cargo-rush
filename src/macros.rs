@@ -2,7 +2,6 @@
 #[macro_export]
 macro_rules! debug {
     ($msg:expr) => {{
-        // The trait `crossterm::style::Stylize` must be in scope at call site.
         let label = <&str as crossterm::style::Stylize>::dim("[Debug]:").bold();
         println!("{} \"{}\"", label, $msg);
     }};

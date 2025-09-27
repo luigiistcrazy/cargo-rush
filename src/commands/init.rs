@@ -24,14 +24,14 @@ pub fn cli() {
     #[cfg(debug_assertions)]
     debug!(&format!("Trying initialization at {}", proj_dir.display()));
     info!("Initializing project...");
-    match File::create_new("Cargorush.toml") {
+    match File::create_new("Cargojet.toml") {
         Ok(_) => {
-            info!(&format!("Initialized cargo-rush in {}", proj_dir.display()));
+            info!(&format!("Initialized cargo-jet in {}", proj_dir.display()));
         }
         Err(err) => {
             if err.kind() == ErrorKind::AlreadyExists {
-                error!("cargo-rush has already been initialized in this directory!");
-                // process::exit(0)
+                error!("cargo-jet has already been initialized in this directory!");
+                process::exit(0)
             }
         }
     };
