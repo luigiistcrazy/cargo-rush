@@ -8,7 +8,7 @@ use crossterm::style::Stylize;
 use crate::debug;
 
 #[derive(Parser, Debug)]
-#[clap(author = crate_authors!(), version = crate_version!(), about = crate_description!(), long_about = None, bin_name = "cargo rush")]
+#[clap(author = crate_authors!(), version = crate_version!(), about = crate_description!(), long_about = None, bin_name = "cargo jet")]
 struct Cli {
     #[clap(subcommand)]
     command: Command,
