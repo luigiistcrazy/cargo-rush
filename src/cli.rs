@@ -1,30 +1,44 @@
-use clap::{Parser, crate_authors, crate_description, crate_version};
+use clap::{Parser, Subcommand, crate_authors, crate_description, crate_version};
+use crossterm::style::Stylize;
 
 use crate::commands;
-
-use crossterm::style::Stylize;
 
 #[cfg(debug_assertions)]
 use crate::debug;
 
 #[derive(Parser, Debug)]
-#[clap(author = crate_authors!(), version = crate_version!(), about = crate_description!(), long_about = None, bin_name = "cargo jet")]
-struct Cli {
-    #[clap(subcommand)]
+#[command(name = "cargo")]
+#[command(bin_name = "cargo")]
+enum CargoCli {
+    Jet(JetArgs),
+}
+
+#[derive(clap::Args, Debug)]
+#[command(
+    author = crate_authors!(),
+    version = crate_version!(),
+    about = crate_description!(),
+    long_about = None,
+    display_name = "cargo jet"
+)]
+struct JetArgs {
+    #[command(subcommand)]
     command: Command,
 }
 
-#[derive(clap::Subcommand, Debug)]
+#[derive(Subcommand, Debug)]
 enum Command {
-    #[clap(about = "Initializes a new project")]
+    #[command(about = "Initializes a new project")]
     Init,
 }
 
 pub fn main() {
-    let cli = Cli::parse();
+    let CargoCli::Jet(jet_args) = CargoCli::parse();
+
     #[cfg(debug_assertions)]
-    debug!(&format!("CLI parsed: {:?}", cli));
-    match &cli.command {
+    debug!(&format!("CLI parsed: {:?}", jet_args));
+
+    match &jet_args.command {
         Command::Init => commands::init::cli(),
     }
 }
