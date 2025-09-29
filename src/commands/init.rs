@@ -15,8 +15,7 @@ pub fn cli() {
             error!(&format!(
                 "Could not find 'Cargo.toml' in current directory. \
                     Make sure your working directory is set to your Rust's project root! \
-                    Error: {}",
-                err
+                    Error: {err}",
             ));
             process::exit(0)
         }

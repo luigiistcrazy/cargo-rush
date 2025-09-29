@@ -36,7 +36,7 @@ pub fn main() {
     let CargoCli::Jet(jet_args) = CargoCli::parse();
 
     #[cfg(debug_assertions)]
-    debug!(&format!("CLI parsed: {:?}", jet_args));
+    debug!(&format!("CLI parsed: {jet_args:?}"));
 
     match &jet_args.command {
         Command::Init => commands::init::cli(),
