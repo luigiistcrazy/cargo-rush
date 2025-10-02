@@ -1,13 +1,14 @@
-use crate::types::OS;
 use cargo_toml::Manifest;
+use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
+#[derive(Serialize, Deserialize)]
 struct _CargoJetToml {
     name: String,
     path: PathBuf,
     remote_name: String,
     remote_url: String,
-    remote_os: OS,
+    remote_os: String,
 }
 
 pub fn init(proj_dir: &Path) {

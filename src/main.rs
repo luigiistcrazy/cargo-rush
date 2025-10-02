@@ -4,7 +4,6 @@ mod cli;
 mod commands;
 mod macros;
 mod toml;
-mod types;
 
 fn main() {
     #[cfg(debug_assertions)]
